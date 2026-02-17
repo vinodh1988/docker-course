@@ -1,0 +1,76 @@
+To install Docker on Red Hat Enterprise Linux (RHEL 8/9), follow the steps below carefully.
+
+⚠️ Note: On RHEL, Docker is not available in default repositories. We install Docker CE (Community Edition) from Docker’s official repository.
+
+✅ Step-by-Step: Install Docker on RHEL 8 / 9
+1️⃣ Remove Old Versions (If Any)
+sudo dnf remove docker \
+                docker-client \
+                docker-client-latest \
+                docker-common \
+                docker-latest \
+                docker-latest-logrotate \
+                docker-logrotate \
+                docker-engine
+
+2️⃣ Install Required Packages
+sudo dnf install -y dnf-utils device-mapper-persistent-data lvm2
+
+3️⃣ Add Docker Repository
+sudo dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+
+We use the CentOS repo because Docker officially provides RHEL-compatible packages there.
+
+4️⃣ Install Docker Engine
+sudo dnf install -y docker-ce docker-ce-cli containerd.io
+
+
+If you see dependency errors, run:
+
+sudo dnf update
+
+
+Then try again.
+
+5️⃣ Start and Enable Docker
+sudo systemctl start docker
+sudo systemctl enable docker
+
+
+Verify status:
+
+sudo systemctl status docker
+
+6️⃣ Verify Installation
+docker --version
+
+
+Test with hello-world container:
+
+sudo docker run hello-world
+
+
+If everything is correct, you’ll see a success message.
+
+✅ Optional: Run Docker Without sudo
+
+Add your user to the docker group:
+
+sudo usermod -aG docker $USER
+
+
+Then logout and login again.
+
+Test:
+
+docker run hello-world
+
+🔎 If You Are Using RHEL 7
+
+Use yum instead of dnf:
+
+sudo yum install -y yum-utils
+sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+sudo yum install docker-ce docker-ce-cli containerd.io
+sudo systemctl start docker
