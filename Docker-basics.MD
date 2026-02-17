@@ -22,3 +22,6 @@ root# java --version
 root# exit
 ```
 
+
+docker commit containerid <yourdockerusenrmae>/imagename
+docker push <yourdockerusername>/imagename
