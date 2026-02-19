@@ -1,0 +1,29 @@
+version: '3.8'
+
+networks:
+  mynetwork:
+    driver: bridge
+
+volumes:
+  shared-space:
+
+services:
+  apache:
+    image: httpd:latest
+    ports:
+      - "9191:80"
+    networks:
+      - mynetwork
+    volumes:
+      - shared-space:/data
+    container_name: apache-server
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "9292:80"
+    networks:
+      - mynetwork
+    volumes:
+      - shared-space:/data
+    container_name: nginx-server
