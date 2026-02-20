@@ -1,0 +1,61 @@
+Step 1: Verify Prerequisites
+
+Make sure you have:
+
+docker --version
+
+
+or
+
+podman --version
+
+
+👉 Minikube needs a container runtime (Docker recommended).
+
+If Docker isn’t installed, install it first.
+
+✅ Step 2: Install kubectl
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+chmod +x kubectl
+sudo mv kubectl /usr/local/bin/
+
+
+Verify:
+
+kubectl version --client
+
+✅ Step 3: Install Minikube
+Download binary
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+
+Install
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+
+
+Verify:
+
+minikube version
+
+✅ Step 4: Start Minikube
+
+If using Docker driver:
+
+minikube start --driver=docker
+
+
+If using Podman:
+
+minikube start --driver=podman
+
+
+If you're on a VM without virtualization:
+
+minikube start --driver=docker --force
+
+✅ Step 5: Verify Cluster
+kubectl get nodes
+
+
+You should see:
+
+minikube   Ready
