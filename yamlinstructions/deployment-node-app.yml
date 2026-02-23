@@ -21,6 +21,8 @@ spec:
       containers:
         - name: node-app
           image: vinodhconnects/node-app-website:latest
+          ports:
+            - containerPort: 3000
           resources:
             requests:
               cpu: 150m
