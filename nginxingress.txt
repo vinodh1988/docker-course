@@ -1,0 +1,66 @@
+# NGINX Ingress Controller Installation Steps
+
+## Prerequisites
+- Kubernetes cluster is running and `kubectl` is configured.
+- MetalLB is installed (for bare-metal/local clusters needing external IP).
+
+## Step 1: Install NGINX Ingress Controller
+Install the official controller manifest:
+
+```bash
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.12.1/deploy/static/provider/cloud/deploy.yaml
+```
+
+## Step 2: Verify controller is running
+
+```bash
+kubectl get pods -n ingress-nginx
+kubectl get svc -n ingress-nginx
+```
+
+Wait until `ingress-nginx-controller` pod is `Running`.
+
+## Step 3: Expose controller with MetalLB
+Set controller service type to `LoadBalancer`:
+
+```bash
+kubectl patch svc ingress-nginx-controller -n ingress-nginx -p "{\"spec\":{\"type\":\"LoadBalancer\"}}"
+```
+
+Attach to MetalLB pool `first-pool`:
+
+```bash
+kubectl annotate svc ingress-nginx-controller -n ingress-nginx metallb.universe.tf/address-pool=first-pool --overwrite
+```
+
+Optional (fixed external IP from your pool):
+
+```bash
+kubectl patch svc ingress-nginx-controller -n ingress-nginx -p "{\"spec\":{\"loadBalancerIP\":\"192.168.49.110\"}}"
+```
+
+## Step 4: Get external IP
+
+```bash
+kubectl get svc ingress-nginx-controller -n ingress-nginx
+```
+
+Use the `EXTERNAL-IP` from this output.
+
+## Step 5: Apply your ingress resources
+From this repo's `ingress-controller` folder:
+
+```bash
+kubectl apply -f ingress-controller/
+```
+
+## Step 6: Verify ingress routes
+
+```bash
+kubectl get ingress
+curl http://<EXTERNAL-IP>/nginx
+curl http://<EXTERNAL-IP>/apache
+curl http://<EXTERNAL-IP>/node
+```
+
+If `curl` works, NGINX Ingress Controller is installed and routing traffic correctly.
