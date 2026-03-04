@@ -1,0 +1,1 @@
+curl --insecure -sfL https://20.193.132.183/v3/import/9m77ntlclw6dpdhttjn9d4hncz8m8kxbq4vx4m9w47v5f22xs4pjb5_c-l2prc.yaml | kubectl apply -f -
